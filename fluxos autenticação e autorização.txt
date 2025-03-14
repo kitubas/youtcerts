@@ -1,0 +1,12 @@
+criação de usuário:
+
+criar uma role no keycloak chamada "view-user-own-info". Vincular ela a um group com o mesmo nome. Colocar esse group como default para todos os usuários criados
+
+página no front com formulário para coletar usuário, senha, ... (opção de criar conta com o google depois) 
+    -> envia essas infos para o backend 
+    -> backend cria o usuário via Keycloak ADMIN API -- faz um proxy para o keycloak só adicionando o client_id e client_secret e devolve o 201 vazio que o keycloak devolve
+
+página de login manda as credenciais do usuário para o backend
+    -> backend gera um token para o usuário no keycloak e devolve para o front
+    -> com esse token o backend vai conseguir pegar o id do usuário ("sub" no jwt) e puxar as infos do usuário com base nesse id
+    -> toda requisição para o backend deve ser feita passando o token jwt

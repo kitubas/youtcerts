@@ -1,0 +1,178 @@
+openapi: 3.0.0
+info:
+  title: YouTube Watch Tracking API
+  version: 1.0.0
+  description: API to interact with YouTube data and track user progress.
+
+paths:
+  /playlists:
+    get:
+      summary: Get a list of playlists based on a search query
+      operationId: getPlaylists
+      parameters:
+        - name: query
+          in: query
+          description: Search query to filter YouTube playlists
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: JWT token for user authentication
+          required: true
+          schema:
+            type: string
+            example: "Bearer <JWT_TOKEN>"
+      responses:
+        '200':
+          description: A list of playlists from YouTube API
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        snippet:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                            description:
+                              type: string
+                            thumbnails:
+                              type: object
+                              properties:
+                                default:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+
+  /playlist/{playlistId}/videos:
+    get:
+      summary: Get videos of a specific playlist and track where the user stopped
+      operationId: getPlaylistVideos
+      parameters:
+        - name: playlistId
+          in: path
+          description: The ID of the playlist
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: JWT token for user authentication
+          required: true
+          schema:
+            type: string
+            example: "Bearer <JWT_TOKEN>"
+      responses:
+        '200':
+          description: A list of videos from the specified playlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        snippet:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                            description:
+                              type: string
+                        progress:
+                          type: object
+                          properties:
+                            minute:
+                              type: integer
+                            second:
+                              type: integer
+                            is_finished:
+                              type: boolean
+                  lastVideoWatched: 
+                    type: string
+                    
+
+  /playlist/{playlistId}/start-watching:
+    post:
+      summary: Indicate that a user started watching a playlist
+      operationId: startWatchingPlaylist
+      parameters:
+        - name: playlistId
+          in: path
+          description: The ID of the playlist
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: JWT token for user authentication
+          required: true
+          schema:
+            type: string
+            example: "Bearer <JWT_TOKEN>"
+      responses:
+        '201':
+          description: Playlist watch tracking started successfully
+          content: {}
+
+  /playlist/{playlistId}/video/{videoId}/watch-time:
+    post:
+      summary: Track the last minute and second the user watched a video
+      operationId: trackVideoWatchTime
+      parameters:
+        - name: playlistId
+          in: path
+          description: The ID of the playlist
+          required: true
+          schema:
+            type: string
+        - name: videoId
+          in: path
+          description: The ID of the video
+          required: true
+          schema:
+            type: string
+        - name: minute
+          in: query
+          description: The minute at which the user stopped watching
+          required: true
+          schema:
+            type: integer
+        - name: second
+          in: query
+          description: The second at which the user stopped watching
+          required: true
+          schema:
+            type: integer
+        - name: isFinished
+          in: query
+          description: Indicates if the video is considered finished
+          required: true
+          schema:
+            type: boolean
+        - name: Authorization
+          in: header
+          description: JWT token for user authentication
+          required: true
+          schema:
+            type: string
+            example: "Bearer <JWT_TOKEN>"
+      responses:
+        '201':
+          description: Video watch progress tracked successfully
+          content: {}
