@@ -9,10 +9,13 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
 
+server:
+  port: 8081
 
 youtcerts:
   auth-server:
     url: http://localhost:8080
+    authentication-path: /realms/users/protocol/openid-connect/token
     client-id: client_id
     client-secret: client_secret
 
