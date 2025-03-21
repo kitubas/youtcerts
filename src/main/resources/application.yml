@@ -14,8 +14,9 @@ server:
 
 youtcerts:
   auth-server:
-    url: http://localhost:8080
+    base-path: http://localhost:8080
     authentication-path: /realms/users/protocol/openid-connect/token
+    users-creation-path: /admin/realms/users/users
     client-id: client_id
     client-secret: client_secret
 

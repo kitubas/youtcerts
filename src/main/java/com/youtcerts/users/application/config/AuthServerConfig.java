@@ -11,9 +11,18 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class AuthServerConfig {
 
-	private String url;
+	private String basePath;
 	private String authenticationPath;
+	private String usersCreationPath;
 	private String clientId;
 	private String clientSecret;
+
+	public String getUsersCreationEndpoint() {
+		return basePath + usersCreationPath;
+	}
+
+	public String getAuthenticationEndpoint() {
+		return basePath + authenticationPath;
+	}
 
 }
